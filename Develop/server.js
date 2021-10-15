@@ -1,28 +1,38 @@
 require('dotenv').config();
-const express = require('express').config();
+const express = require('express');
 const mongoose = require('mongoose');
-const logger = require('morgan');
-const path = require('path');
+const htmlRoutes = require('./routes/htmlRoutes');
+const apiRoutes = require('./routes/apiRoutes');
 
+const morgan = require('morgan');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(logger('dev'));
+app.use(morgan("dev"));
 
 app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use(apiRoutes);
+app.use(htmlRoutes);
 
-let db = mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workout", {
+// CONNECTING TO LOCAL MONGODB INSTANCE
+mongoose.connect(process.env.MONGODB_URI || `mongodb+srv://asantercureton:CureWorld27@cluster0.e7rad.mongodb.net/nosql-workout-tracker-10132021?retryWrites=true&w=majority`, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  useFindAndModify: true,
+  useFindAndModify: false,
   useCreateIndex: true,
 });
 
-app.use(routes);
+// CHECKING TO SEE IF CONNECT WAS SUCCESSFUL
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, "connection error: "));
+db.once('open', () => {
+  console.log('Connected successfully!');
+});
+
 
 app.listen(PORT, () => console.log(`App listening on port http://localhost:${PORT}`));
 

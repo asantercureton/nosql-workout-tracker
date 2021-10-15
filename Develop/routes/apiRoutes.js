@@ -37,8 +37,13 @@ router.post('/api/workouts', async (req, res) => {
 });
 
 // UPDATE/PUT A WORKOUT
-router.put('/api/workouts/:_id', async (req, res) => {
-    const workout = await workoutModel.findByIdAndUpdate(req.params.id, { $push: { exercises: req.body } });
+router.put('/api/workouts/:id', async (req, res) => {
+    const workout = await workoutModel.findOneAndUpdate(
+        { _id: req.params.id },
+        {
+            $push: { exercises: req.body }
+        }
+    );
 
     try {
         res.send(workout);

@@ -18,13 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(apiRoutes);
 app.use(htmlRoutes);
 
-// CONNECTING TO LOCAL MONGODB INSTANCE
-mongoose.connect(process.env.MONGODB_URI || `mongodb+srv://asantercureton:CureWorld27@cluster0.e7rad.mongodb.net/nosql-workout-tracker-10132021?retryWrites=true&w=majority`, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useFindAndModify: false,
-  useCreateIndex: true,
-});
+
 
 // CHECKING TO SEE IF CONNECT WAS SUCCESSFUL
 const db = mongoose.connection;

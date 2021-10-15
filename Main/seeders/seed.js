@@ -125,6 +125,19 @@ const workoutSeed = [
       },
     ],
   },
+  {
+    day: new Date(new Date().setDate(new Date().getDate())),
+    exercises: [
+      {
+        type: 'resistance',
+        name: 'Resistance Bands',
+        duration: 20,
+        weight: 80,
+        reps: 10,
+        sets: 4,
+      },
+    ],
+  },
 ];
 
 db.Workout.deleteMany({})

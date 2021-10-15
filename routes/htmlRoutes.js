@@ -1,6 +1,7 @@
 // IMPORTING EXPRESS ROUTER & PATH
 const router = require('express').Router();
 const path = require('path');
+const apiRoutes = require('./apiRoutes');
 
 // GET HOME PAGE
 router.get("/", function (req, res) {

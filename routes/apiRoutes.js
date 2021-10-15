@@ -1,64 +1,47 @@
 // IMPORTING EXPRESS ROUTER & MODEL
 const router = require('express').Router();
-const workoutModel = require('../models/Workout');
+const db = require('../models');
 
 // READ/GET ALL WORKOUTS
-router.get('/api/workouts', async (req, res) => {
-    const workoutData = await workoutModel.find();
-
-    try {
-        res.send(workoutData);
-    } catch (err) {
-        res.status(500).send(err);
-    }
-        // .then((dbWorkouts) => {
-        //     res.json(dbWorkouts);
-        // }).catch((err) => {
-        //     res.json(err);
-        // });
+router.get('/api/workouts', (req, res) => {
+    db.Workout.find({})
+        .then((dbWorkout) => {
+            res.status(200).json(dbWorkout);
+        })
+        .catch((err) => {
+            res.status(400).json(err);
+        });
 });
 
 // CREATE/POST A WORKOUT
 router.post('/api/workouts', async (req, res) => {
-    const workout = new workoutModel(req.body) ;
-
-    try {
-        await workout.save();
-        res.send(workout);
-    } catch (err) {
-        res.status(500).send(err);
-    }
-    // workout
-    //     .then((dbWorkouts) => {
-    //         res.json(dbWorkouts);
-    //     }).catch((err) => {
-    //         res.json(err);
-    //     });
+    db.Workout.create(req.body)
+        .then((workout) => {
+            res.status(200).json(workout);
+        })
+        .catch((err) => {
+            res.status(500).json(err);
+        })
 });
 
 // UPDATE/PUT A WORKOUT
 router.put('/api/workouts/:id', async (req, res) => {
-    const workout = await workoutModel.findOneAndUpdate(
-        { _id: req.params.id },
+    const id = req.params.id;
+    
+    db.Workout.updateOne(
+        { _id: id },
         {
-            $push: { exercises: req.body }
+            $push: { 
+                exercises: { ...req.body },
+            },
         }
-    );
-
-    try {
-        res.send(workout);
-    } catch (err) {
-        console.log(err);
-        res.status(500).send(err);
-    }
-
-
-    // db.Workout.findByIdAndUpdate(req.params.id, { $push: { exercises: req.body } })
-    //     .then((dbWorkouts) => {
-    //         res.json(dbWorkouts);
-    //     }).catch((err) => {
-    //         res.json(err);
-    //     });
+    )
+        .then((workout) => {
+            res.status(200).json(workout);
+        })
+        .catch((err) => {
+            res.status(500).json(err);
+        });
 });
 
 // EXPORT ROUTES for API

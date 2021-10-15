@@ -18,7 +18,14 @@ app.use(express.urlencoded({ extended: true }));
 app.use(apiRoutes);
 app.use(htmlRoutes);
 
-
+// CONNECTING TO LOCAL MONGODB INSTANCE
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/workout', 
+{
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useFindAndModify: false,
+  useCreateIndex: true,
+});
 
 // CHECKING TO SEE IF CONNECT WAS SUCCESSFUL
 const db = mongoose.connection;

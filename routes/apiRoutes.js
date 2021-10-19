@@ -3,14 +3,6 @@ const router = require('express').Router();
 const mongoose = require('mongoose');
 const db = require('../models');
 
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/workout', 
-{
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useFindAndModify: false,
-  useCreateIndex: true,
-});
-
 // READ/GET ALL WORKOUTS
 router.get('/api/workouts', (req, res) => {
     db.Workout.aggregate([
@@ -39,6 +31,8 @@ router.get('/api/workouts/range', (req, res) => {
             },
         }
     ])
+        .sort({ _id : -1})
+        .limit(7)
         .then((dbWorkout) => {
             res.status(200).json(dbWorkout);
         })
@@ -48,7 +42,7 @@ router.get('/api/workouts/range', (req, res) => {
 });
 
 // CREATE/POST A WORKOUT
-router.post('/api/workouts', async (req, res) => {
+router.post('/api/workouts', (req, res) => {
     db.Workout.create({})
         .then((dbWorkout) => {
             res.json(dbWorkout);
@@ -59,7 +53,7 @@ router.post('/api/workouts', async (req, res) => {
 });
 
 // UPDATE/PUT A WORKOUT
-router.put('/api/workouts/:id', async (req, res) => {
+router.put('/api/workouts/:id', (req, res) => {
     const id = req.params.id;
     const body = req.body;
     

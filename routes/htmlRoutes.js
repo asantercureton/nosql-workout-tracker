@@ -1,12 +1,7 @@
 // IMPORTING EXPRESS ROUTER & PATH
 const router = require('express').Router();
 const path = require('path');
-const apiRoutes = require('./apiRoutes');
 
-// GET HOME PAGE
-router.get("/", function (req, res) {
-    res.sendFile(path.join(__dirname, "../public/index.html"));
-});
 
 // GET EXERCISE PAGE
 router.get("/exercise", function (req, res) {
@@ -17,6 +12,11 @@ router.get("/exercise", function (req, res) {
 router.get("/stats", function (req, res) {
     res.sendFile(path.join(__dirname, "../public/stats.html"));
 });
+
+// GET HOME PAGE
+// router.get("/", function (req, res) {
+//     res.sendFile(path.join(__dirname, "../public/index.html"));
+// });
 
 // EXPORTING ROUTES for HTML
 module.exports = router;
